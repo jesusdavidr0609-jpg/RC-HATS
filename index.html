@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RC HATS | Diseño que corona tu estilo</title>
+
+  <meta name="description" content="RC HATS - Gorras G5 y Original. Diseño que corona tu estilo.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    header {
+      background: #050505;
+      color: white;
+      padding: 22px 18px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 3px 15px rgba(0,0,0,.25);
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    .slogan {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #ccc;
+      letter-spacing: 1px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #111, #292929);
+      color: white;
+      text-align: center;
+      padding: 55px 20px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .hero p {
+      color: #ddd;
+      font-size: 17px;
+      max-width: 600px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .whatsapp-top {
+      display: inline-block;
+      margin-top: 25px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      padding: 13px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: .2s;
+    }
+
+    .whatsapp-top:hover {
+      transform: scale(1.04);
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 25px 15px 10px;
+    }
+
+    .filter-btn {
+      border: none;
+      background: #111;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .filter-btn:hover {
+      background: #333;
+    }
+
+    .catalogo {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 18px 60px;
+    }
+
+    .titulo-catalogo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .titulo-catalogo h2 {
+      font-size: 30px;
+    }
+
+    .titulo-catalogo p {
+      color: #666;
+      margin-top: 7px;
+    }
+
+    .productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    .producto {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,.08);
+      transition: .25s;
+    }
+
+    .producto:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.14);
+    }
+
+    .producto-imagen {
+      width: 100%;
+      height: 280px;
+      background: #e9e9e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .producto-imagen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sin-imagen {
+      color: #777;
+      text-align: center;
+      font-size: 15px;
+      padding: 20px;
+    }
+
+    .producto-info {
+      padding: 18px;
+    }
+
+    .producto-info h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .tipo {
+      display: inline-block;
+      background: #eee;
+      color: #222;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .disponible {
+      color: #16843b;
+      font-weight: bold;
+      margin-bottom: 13px;
+    }
+
+    .agotado {
+      color: #b00020;
+      font-weight: bold;
+      margin-bottom: 13px;
+    }
+
+    .btn-whatsapp {
+      display: block;
+      text-align: center;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 9px;
+      font-weight: bold;
+    }
+
+    .btn-whatsapp:hover {
+      background: #1ebe5d;
+    }
+
+    .btn-agotado {
+      display: block;
+      text-align: center;
+      background: #ccc;
+      color: #666;
+      padding: 12px;
+      border-radius: 9px;
+      font-weight: bold;
+    }
+
+    .contacto {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 45px 20px;
+    }
+
+    .contacto h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .contacto p {
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background: #050505;
+      color: #888;
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .logo {
+        font-size: 27px;
+      }
+
+      .hero {
+        padding: 45px 18px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .producto-imagen {
+        height: 260px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="logo">RC HATS</div>
+    <div class="slogan">DISEÑO QUE CORONA TU ESTILO</div>
+  </header>
+
+  <!-- PRESENTACIÓN -->
+  <section class="hero">
+    <h1>RC HATS</h1>
+
+    <p>
+      Descubre nuestra colección de gorras G5 y Original.
+      Elige tu estilo y realiza tu pedido directamente por WhatsApp.
+    </p>
+
+    <a
+      class="whatsapp-top"
+      href="https://wa.me/528118995380?text=Hola%20RC%20HATS%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20gorras."
+      target="_blank">
+      💬 Contactar por WhatsApp
+    </a>
+  </section>
+
+  <!-- FILTROS -->
+  <div class="filters">
+    <button class="filter-btn" onclick="filtrar('todos')">
+      Todas
+    </button>
+
+    <button class="filter-btn" onclick="filtrar('G5')">
+      G5
+    </button>
+
+    <button class="filter-btn" onclick="filtrar('Original')">
+      Original
+    </button>
+
+    <button class="filter-btn" onclick="filtrar('disponible')">
+      Disponibles
+    </button>
+  </div>
+
+  <!-- CATÁLOGO -->
+  <main class="catalogo">
+
+    <div class="titulo-catalogo">
+      <h2>Catálogo</h2>
+      <p>Encuentra tu próxima gorra</p>
+    </div>
+
+    <div class="productos" id="productos"></div>
+
+  </main>
+
+  <!-- CONTACTO -->
+  <section class="contacto">
+
+    <h2>¿Encontraste tu gorra?</h2>
+
+    <p>
+      Escríbenos directamente por WhatsApp para realizar tu pedido.
+    </p>
+
+    <a
+      class="whatsapp-top"
+      href="https://wa.me/528118995380?text=Hola%20RC%20HATS%2C%20quiero%20hacer%20un%20pedido."
+      target="_blank">
+      📲 Pedir por WhatsApp
+    </a>
+
+  </section>
+
+  <!-- PIE -->
+  <footer>
+    © 2026 RC HATS · Diseño que corona tu estilo
+  </footer>
+
+
+  <script>
+
+    /*
+      ==========================================
+      CATÁLOGO DE RC HATS
+      ==========================================
+
+      AQUÍ SE AGREGARÁN LAS GORRAS.
+
+      Por ahora dejamos ejemplos para que
+      puedas comprobar que la página funciona.
+
+      Más adelante podemos crear el panel
+      administrador para que NO tengas que
+      modificar este código.
+    */
+
+    const productos = [
+
+      {
+        nombre: "Gorra RC HATS #01",
+        tipo: "G5",
+        disponible: true,
+        imagen: "",
+      },
+
+      {
+        nombre: "Gorra RC HATS #02",
+        tipo: "Original",
+        disponible: true,
+        imagen: "",
+      },
+
+      {
+        nombre: "Gorra RC HATS #03",
+        tipo: "G5",
+        disponible: false,
+        imagen: "",
+      }
+
+    ];
+
+
+    const numeroWhatsApp = "528118995380";
+
+
+    function mostrarProductos(lista) {
+
+      const contenedor = document.getElementById("productos");
+
+      contenedor.innerHTML = "";
+
+
+      if (lista.length === 0) {
+
+        contenedor.innerHTML = `
+          <p style="
+            grid-column: 1/-1;
+            text-align:center;
+            padding:40px;
+            color:#777;
+          ">
+            No hay gorras disponibles en esta categoría.
+          </p>
+        `;
+
+        return;
+      }
+
+
+      lista.forEach((producto) => {
+
+        const mensaje =
+          `Hola RC HATS, me interesa la gorra "${producto.nombre}". ¿Sigue disponible?`;
+
+        const enlaceWhatsApp =
+          `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+
+
+        const imagenHTML = producto.imagen
+          ? `<img src="${producto.imagen}" alt="${producto.nombre}">`
+          : `
+            <div class="sin-imagen">
+              🧢<br><br>
+              Foto próximamente
+            </div>
+          `;
+
+
+        const estadoHTML = producto.disponible
+          ? `<div class="disponible">● Disponible</div>`
+          : `<div class="agotado">● Agotada</div>`;
+
+
+        const botonHTML = producto.disponible
+
+          ? `
+            <a
+              class="btn-whatsapp"
+              href="${enlaceWhatsApp}"
+              target="_blank">
+              💬 Pedir por WhatsApp
+            </a>
+          `
+
+          : `
+            <div class="btn-agotado">
+              Agotada
+            </div>
+          `;
+
+
+        const tarjeta = document.createElement("div");
+
+        tarjeta.className = "producto";
+
+        tarjeta.dataset.tipo = producto.tipo;
+        tarjeta.dataset.disponible = producto.disponible;
+
+
+        tarjeta.innerHTML = `
+
+          <div class="producto-imagen">
+            ${imagenHTML}
+          </div>
+
+          <div class="producto-info">
+
+            <h3>${producto.nombre}</h3>
+
+            <span class="tipo">
+              ${producto.tipo}
+            </span>
+
+            ${estadoHTML}
+
+            ${botonHTML}
+
+          </div>
+
+        `;
+
+
+        contenedor.appendChild(tarjeta);
+
+      });
+
+    }
+
+
+    function filtrar(filtro) {
+
+      if (filtro === "todos") {
+
+        mostrarProductos(productos);
+
+        return;
+
+      }
+
+
+      if (filtro === "disponible") {
+
+        const disponibles =
+          productos.filter(producto => producto.disponible === true);
+
+        mostrarProductos(disponibles);
+
+        return;
+
+      }
+
+
+      const filtrados =
+        productos.filter(producto => producto.tipo === filtro);
+
+      mostrarProductos(filtrados);
+
+    }
+
+
+    mostrarProductos(productos);
+
+  </script>
+
+</body>
+</html>
