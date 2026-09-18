@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RC HATS | Administrador</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f3f3f3;
+      color: #111;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 25px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      letter-spacing: 3px;
+    }
+
+    header p {
+      margin-top: 7px;
+      color: #ccc;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px 15px;
+    }
+
+    .panel {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 16px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .btn-principal {
+      width: 100%;
+      margin-top: 18px;
+      background: #111;
+      color: white;
+    }
+
+    .btn-principal:hover {
+      background: #333;
+    }
+
+    .btn-editar {
+      background: #222;
+      color: white;
+      margin-right: 5px;
+    }
+
+    .btn-eliminar {
+      background: #c62828;
+      color: white;
+    }
+
+    .btn-salir {
+      background: #c62828;
+      color: white;
+      margin-top: 15px;
+    }
+
+    .producto {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .producto img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #eee;
+    }
+
+    .producto-info {
+      flex: 1;
+    }
+
+    .producto-info h3 {
+      margin-bottom: 7px;
+    }
+
+    .estado-disponible {
+      color: #16833a;
+      font-weight: bold;
+    }
+
+    .estado-agotado {
+      color: #c62828;
+      font-weight: bold;
+    }
+
+    .mensaje {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 7px;
+      background: #eee;
+    }
+
+    .oculto {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+
+      .producto {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .producto img {
+        width: 100%;
+        height: 220px;
+      }
+
+      .producto button {
+        margin-top: 8px;
+        width: 100%;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>RC HATS</h1>
+    <p>Panel de administración</p>
+  </header>
+
+
+  <div class="contenedor">
+
+    <!-- LOGIN -->
+
+    <section id="loginPanel" class="panel">
+
+      <h2>🔐 Administrador</h2>
+
+      <label>Correo</label>
+
+      <input
+        type="email"
+        id="correo"
+        placeholder="Tu correo"
+      >
+
+      <label>Contraseña</label>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Tu contraseña"
+      >
+
+      <button
+        class="btn-principal"
+        onclick="iniciarSesion()"
+      >
+        Iniciar sesión
+      </button>
+
+      <div
+        id="mensajeLogin"
+        class="mensaje oculto"
+      ></div>
+
+    </section>
+
+
+    <!-- ADMIN -->
+
+    <section
+      id="adminPanel"
+      class="oculto"
+    >
+
+      <div class="panel">
+
+        <h2>📦 Administrar productos</h2>
+
+        <label>Nombre de la gorra</label>
+
+        <input
+          type="text"
+          id="nombre"
+          placeholder="Ej. Gorra RC HATS #01"
+        >
+
+
+        <label>Tipo</label>
+
+        <select id="tipo">
+
+          <option value="G5">
+            G5
+          </option>
+
+          <option value="Original">
+            Original
+          </option>
+
+        </select>
+
+
+        <label>Imagen</label>
+
+        <input
+          type="url"
+          id="imagen"
+          placeholder="URL de la imagen"
+        >
+
+
+        <label>Disponibilidad</label>
+
+        <select id="disponible">
+
+          <option value="true">
+            Disponible
+          </option>
+
+          <option value="false">
+            Agotado
+          </option>
+
+        </select>
+
+
+        <button
+          class="btn-principal"
+          onclick="guardarProducto()"
+        >
+          ➕ Agregar gorra
+        </button>
+
+
+        <button
+          id="cancelarEdicion"
+          class="btn-principal oculto"
+          onclick="cancelarEdicion()"
+        >
+          Cancelar edición
+        </button>
+
+
+        <div
+          id="mensajeAdmin"
+          class="mensaje oculto"
+        ></div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <h2>🧢 Mis gorras</h2>
+
+        <div id="listaProductos">
+
+          Cargando productos...
+
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <button
+          class="btn-salir"
+          onclick="cerrarSesion()"
+        >
+          Cerrar sesión
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://itxptdwwnpnsbzbzwkwt.supabase.co";
+
+
+    const SUPABASE_KEY =
+      "sb_publishable_w_HpfrpFyBkKdg h92drhMA_Tat8CMRp";
+
+
+    let productos = [];
+
+    let productoEditando = null;
+
+
+    async function iniciarSesion() {
+
+      const correo =
+        document.getElementById("correo").value;
+
+      const password =
+        document.getElementById("password").value;
+
+
+      const respuesta = await fetch(
+        `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
+        {
+          method: "POST",
+
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            email: correo,
+            password: password
+          })
+        }
+      );
+
+
+      const datos =
+        await respuesta.json();
+
+
+      if (!respuesta.ok) {
+
+        mostrarMensajeLogin(
+          "Correo o contraseña incorrectos."
+        );
+
+        return;
+
+      }
+
+
+      localStorage.setItem(
+        "rc_access_token",
+        datos.access_token
+      );
+
+
+      localStorage.setItem(
+        "rc_refresh_token",
+        datos.refresh_token
+      );
+
+
+      document
+        .getElementById("loginPanel")
+        .classList.add("oculto");
+
+
+      document
+        .getElementById("adminPanel")
+        .classList.remove("oculto");
+
+
+      cargarProductos();
+
+    }
+
+
+    async function cargarProductos() {
+
+      const token =
+        localStorage.getItem("rc_access_token");
+
+
+      if (!token) return;
+
+
+      const respuesta = await fetch(
+        `${SUPABASE_URL}/rest/v1/productos?select=*&order=id.desc`,
+        {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      );
+
+
+      if (!respuesta.ok) {
+
+        document.getElementById(
+          "listaProductos"
+        ).innerHTML =
+          "No se pudieron cargar los productos.";
+
+        return;
+
+      }
+
+
+      productos =
+        await respuesta.json();
+
+
+      mostrarProductos();
+
+    }
+
+
+    function mostrarProductos() {
+
+      const lista =
+        document.getElementById(
+          "listaProductos"
+        );
+
+
+      if (productos.length === 0) {
+
+        lista.innerHTML =
+          "<p>No hay productos todavía.</p>";
+
+        return;
+
+      }
+
+
+      lista.innerHTML = "";
+
+
+      productos.forEach(producto => {
+
+        const div =
+          document.createElement("div");
+
+
+        div.className =
+          "producto";
+
+
+        const imagen =
+          producto.imagen_url || "";
+
+
+        div.innerHTML = `
+
+          ${
+            imagen
+              ? `<img src="${imagen}" alt="${producto.nombre}">`
+              : `<img alt="Sin imagen">`
+          }
+
+          <div class="producto-info">
+
+            <h3>
+              ${producto.nombre}
+            </h3>
+
+            <p>
+              Tipo: ${producto.tipo}
+            </p>
+
+            <p class="${
+              producto.disponible
+                ? "estado-disponible"
+                : "estado-agotado"
+            }">
+
+              ${
+                producto.disponible
+                  ? "Disponible"
+                  : "Agotado"
+              }
+
+            </p>
+
+            <br>
+
+            <button
+              class="btn-editar"
+              onclick="editarProducto(${producto.id})"
+            >
+              ✏️ Editar
+            </button>
+
+            <button
+              class="btn-eliminar"
+              onclick="eliminarProducto(${producto.id})"
+            >
+              🗑️ Eliminar
+            </button>
+
+          </div>
+
+        `;
+
+
+        lista.appendChild(div);
+
+      });
+
+    }
+
+
+    async function guardarProducto() {
+
+      const nombre =
+        document.getElementById("nombre").value.trim();
+
+
+      const tipo =
+        document.getElementById("tipo").value;
+
+
+      const imagen =
+        document.getElementById("imagen").value.trim();
+
+
+      const disponible =
+        document.getElementById("disponible").value === "true";
+
+
+      if (!nombre) {
+
+        mostrarMensajeAdmin(
+          "Escribe el nombre de la gorra."
+        );
+
+        return;
+
+      }
+
+
+      const token =
+        localStorage.getItem("rc_access_token");
+
+
+      let respuesta;
+
+
+      if (productoEditando === null) {
+
+        respuesta = await fetch(
+          `${SUPABASE_URL}/rest/v1/productos`,
+          {
+            method: "POST",
+
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Prefer": "return=representation"
+            },
+
+            body: JSON.stringify({
+              nombre: nombre,
+              tipo: tipo,
+              disponible: disponible,
+              imagen_url: imagen
+            })
+          }
+        );
+
+      } else {
+
+        respuesta = await fetch(
+          `${SUPABASE_URL}/rest/v1/productos?id=eq.${productoEditando}`,
+          {
+            method: "PATCH",
+
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Prefer": "return=representation"
+            },
+
+            body: JSON.stringify({
+              nombre: nombre,
+              tipo: tipo,
+              disponible: disponible,
+              imagen_url: imagen
+            })
+          }
+        );
+
+      }
+
+
+      if (!respuesta.ok) {
+
+        const error =
+          await respuesta.text();
+
+        console.error(error);
+
+        mostrarMensajeAdmin(
+          "No se pudo guardar el producto."
+        );
+
+        return;
+
+      }
+
+
+      mostrarMensajeAdmin(
+        productoEditando === null
+          ? "✅ Gorra agregada correctamente."
+          : "✅ Gorra actualizada correctamente."
+      );
+
+
+      limpiarFormulario();
+
+      cargarProductos();
+
+    }
+
+
+    function editarProducto(id) {
+
+      const producto =
+        productos.find(
+          p => p.id === id
+        );
+
+
+      if (!producto) return;
+
+
+      productoEditando = id;
+
+
+      document.getElementById(
+        "nombre"
+      ).value =
+        producto.nombre || "";
+
+
+      document.getElementById(
+        "tipo"
+      ).value =
+        producto.tipo || "G5";
+
+
+      document.getElementById(
+        "imagen"
+      ).value =
+        producto.imagen_url || "";
+
+
+      document.getElementById(
+        "disponible"
+      ).value =
+        producto.disponible
+          ? "true"
+          : "false";
+
+
+      document.querySelector(
+        "#adminPanel .btn-principal"
+      ).textContent =
+        "💾 Guardar cambios";
+
+
+      document.getElementById(
+        "cancelarEdicion"
+      ).classList.remove("oculto");
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    function cancelarEdicion() {
+
+      limpiarFormulario();
+
+    }
+
+
+    function limpiarFormulario() {
+
+      productoEditando = null;
+
+
+      document.getElementById(
+        "nombre"
+      ).value = "";
+
+
+      document.getElementById(
+        "imagen"
+      ).value = "";
+
+
+      document.getElementById(
+        "tipo"
+      ).value = "G5";
+
+
+      document.getElementById(
+        "disponible"
+      ).value = "true";
+
+
+      document.querySelector(
+        "#adminPanel .btn-principal"
+      ).textContent =
+        "➕ Agregar gorra";
+
+
+      document.getElementById(
+        "cancelarEdicion"
+      ).classList.add("oculto");
+
+    }
+
+
+    async function eliminarProducto(id) {
+
+      const confirmar =
+        confirm(
+          "¿Seguro que quieres eliminar esta gorra?"
+        );
+
+
+      if (!confirmar) return;
+
+
+      const token =
+        localStorage.getItem(
+          "rc_access_token"
+        );
+
+
+      const respuesta =
+        await fetch(
+          `${SUPABASE_URL}/rest/v1/productos?id=eq.${id}`,
+          {
+            method: "DELETE",
+
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${token}`
+            }
+          }
+        );
+
+
+      if (!respuesta.ok) {
+
+        mostrarMensajeAdmin(
+          "No se pudo eliminar el producto."
+        );
+
+        return;
+
+      }
+
+
+      mostrarMensajeAdmin(
+        "🗑️ Producto eliminado."
+      );
+
+
+      cargarProductos();
+
+    }
+
+
+    function cerrarSesion() {
+
+      localStorage.removeItem(
+        "rc_access_token"
+      );
+
+      localStorage.removeItem(
+        "rc_refresh_token"
+      );
+
+
+      location.reload();
+
+    }
+
+
+    function mostrarMensajeLogin(texto) {
+
+      const elemento =
+        document.getElementById(
+          "mensajeLogin"
+        );
+
+
+      elemento.textContent =
+        texto;
+
+
+      elemento.classList.remove(
+        "oculto"
+      );
+
+    }
+
+
+    function mostrarMensajeAdmin(texto) {
+
+      const elemento =
+        document.getElementById(
+          "mensajeAdmin"
+        );
+
+
+      elemento.textContent =
+        texto;
+
+
+      elemento.classList.remove(
+        "oculto"
+      );
+
+
+      setTimeout(() => {
+
+        elemento.classList.add(
+          "oculto"
+        );
+
+      }, 3000);
+
+    }
+
+
+    window.addEventListener(
+      "load",
+      () => {
+
+        const token =
+          localStorage.getItem(
+            "rc_access_token"
+          );
+
+
+        if (token) {
+
+          document
+            .getElementById("loginPanel")
+            .classList.add("oculto");
+
+
+          document
+            .getElementById("adminPanel")
+            .classList.remove("oculto");
+
+
+          cargarProductos();
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
