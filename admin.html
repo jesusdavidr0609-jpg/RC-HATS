@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RC HATS - Administrador</title>
+
+  <title>RC HATS - Administración</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
@@ -14,39 +17,39 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      color: #222;
+      background: #f3f4f6;
+      color: #111827;
     }
 
     header {
-      background: #111;
+      background: #111827;
       color: white;
+      padding: 22px 15px;
       text-align: center;
-      padding: 25px 15px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 30px;
+      font-size: 28px;
     }
 
     header p {
-      margin: 7px 0 0;
-      color: #ccc;
+      margin: 6px 0 0;
+      opacity: .8;
     }
 
     .container {
-      width: 94%;
-      max-width: 850px;
+      width: 95%;
+      max-width: 1000px;
       margin: 25px auto;
     }
 
     .card {
       background: white;
-      padding: 22px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.08);
+      border-radius: 16px;
+      padding: 20px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.08);
     }
 
     h2 {
@@ -55,7 +58,8 @@
 
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 14px;
+      margin-bottom: 6px;
       font-weight: bold;
     }
 
@@ -64,39 +68,39 @@
     button {
       width: 100%;
       padding: 13px;
-      margin-top: 8px;
-      border-radius: 9px;
+      border-radius: 10px;
       font-size: 16px;
     }
 
     input,
     select {
-      border: 1px solid #ccc;
+      border: 1px solid #d1d5db;
       background: white;
     }
 
     button {
-      border: 0;
-      background: #111;
+      border: none;
+      background: #111827;
       color: white;
-      font-weight: bold;
       cursor: pointer;
+      margin-top: 14px;
+      font-weight: bold;
     }
 
     button:hover {
       opacity: .9;
     }
 
-    .secondary {
-      background: #666;
+    .btn-green {
+      background: #16a34a;
     }
 
-    .danger {
-      background: #c62828;
+    .btn-red {
+      background: #dc2626;
     }
 
-    .success {
-      background: #16833b;
+    .btn-gray {
+      background: #6b7280;
     }
 
     .hidden {
@@ -104,78 +108,121 @@
     }
 
     .message {
-      display: none;
-      margin-top: 15px;
+      margin-top: 12px;
       padding: 12px;
-      border-radius: 9px;
-      font-size: 14px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      white-space: pre-wrap;
     }
 
-    .message.ok {
-      display: block;
-      background: #e6f7eb;
-      color: #176b32;
+    .success {
+      background: #dcfce7;
+      color: #166534;
     }
 
-    .message.error {
-      display: block;
-      background: #fde8e8;
-      color: #a71919;
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     .product {
-      border: 1px solid #ddd;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
       padding: 15px;
-      border-radius: 12px;
       margin-top: 15px;
     }
 
-    .product img {
-      width: 100%;
-      max-height: 260px;
-      object-fit: cover;
-      border-radius: 10px;
+    .product-images {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
     }
 
-    .product h3 {
-      margin-bottom: 5px;
+    .product-images img {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+      border: 1px solid #ddd;
+    }
+
+    .product-info {
+      margin-top: 10px;
     }
 
     .available {
-      color: #16833b;
+      color: #16a34a;
       font-weight: bold;
     }
 
     .unavailable {
-      color: #c62828;
+      color: #dc2626;
       font-weight: bold;
     }
 
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
+    .preview {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
-    .user {
-      background: #eee;
+    .preview-item {
+      position: relative;
+    }
+
+    .preview-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .preview-number {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: rgba(0,0,0,.7);
+      color: white;
+      padding: 3px 7px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .user-bar {
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
       padding: 12px;
-      border-radius: 9px;
-      word-break: break-word;
+      border-radius: 10px;
       margin-bottom: 15px;
     }
 
     .small {
-      color: #666;
       font-size: 13px;
-      line-height: 1.5;
+      color: #6b7280;
     }
 
-    @media(max-width:600px) {
-      .actions {
-        grid-template-columns: 1fr;
-      }
+    .file-label {
+      display: block;
+      padding: 15px;
+      background: #eef2ff;
+      border: 2px dashed #6366f1;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .file-label input {
+      display: none;
+    }
+
+    .loading {
+      opacity: .7;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -190,151 +237,167 @@
 <div class="container">
 
   <!-- LOGIN -->
-  <div id="loginSection" class="card">
+  <section id="loginSection" class="card">
 
     <h2>Iniciar sesión</h2>
 
-    <p class="small">
+    <p>
       Escribe tu correo y te enviaremos un enlace para entrar.
       No necesitas contraseña.
     </p>
 
-    <label>Correo electrónico</label>
+    <label for="email">Correo electrónico</label>
 
     <input
-      id="email"
       type="email"
-      placeholder="tu-correo@gmail.com"
-      autocomplete="email"
+      id="email"
+      value="jesusdavidr0609@gmail.com"
+      placeholder="Tu correo"
     >
 
-    <button onclick="sendMagicLink()">
-      📩 Enviarme enlace de acceso
+    <button id="loginButton" onclick="sendMagicLink()">
+      Enviarme enlace de acceso
     </button>
 
-    <div id="loginMessage" class="message"></div>
+    <div id="loginMessage" class="message hidden"></div>
 
-  </div>
+  </section>
 
 
-  <!-- PANEL ADMIN -->
-  <div id="adminSection" class="hidden">
+  <!-- ADMIN -->
+  <section id="adminSection" class="hidden">
 
     <div class="card">
 
-      <h2>Panel RC HATS</h2>
-
-      <div class="user">
-        <strong>Administrador:</strong><br>
-        <span id="adminEmail"></span>
+      <div class="user-bar">
+        <strong>Sesión iniciada</strong>
+        <div id="userEmail"></div>
       </div>
 
-      <button
-        class="secondary"
-        onclick="logout()"
-      >
+      <button class="btn-gray" onclick="logout()">
         Cerrar sesión
       </button>
 
     </div>
 
 
-    <!-- AGREGAR GORRA -->
+    <!-- FORMULARIO -->
     <div class="card">
 
-      <h2 id="formTitle">Agregar gorra</h2>
+      <h2 id="formTitle">Agregar producto</h2>
+
+      <input type="hidden" id="productId">
+
+      <label for="productName">
+        Nombre de la gorra
+      </label>
 
       <input
-        type="hidden"
-        id="productId"
-      >
-
-      <label>Nombre de la gorra</label>
-
-      <input
-        id="productName"
         type="text"
-        placeholder="Ejemplo: Gorra RC HATS #01"
+        id="productName"
+        placeholder="Ejemplo: Gorra Negra Bordada"
       >
 
-      <label>Tipo</label>
+
+      <label for="productType">
+        Tipo
+      </label>
 
       <select id="productType">
         <option value="G5">G5</option>
         <option value="Original">Original</option>
       </select>
 
-      <label>Imagen</label>
 
-      <input
-        id="productImage"
-        type="url"
-        placeholder="URL de la imagen"
-      >
+      <label>
+        Fotos del producto
+      </label>
 
-      <label>Disponibilidad</label>
+      <label class="file-label">
+
+        📷 Seleccionar varias fotos
+
+        <input
+          type="file"
+          id="productImages"
+          accept="image/*"
+          multiple
+          onchange="previewImages()"
+        >
+
+      </label>
+
+      <div class="small">
+        Puedes seleccionar varias fotos al mismo tiempo.
+      </div>
+
+      <div id="preview" class="preview"></div>
+
+
+      <label>
+        Disponibilidad
+      </label>
 
       <select id="productAvailable">
         <option value="true">Disponible</option>
-        <option value="false">Agotada</option>
+        <option value="false">Agotado</option>
       </select>
 
+
       <button
-        class="success"
+        id="saveButton"
+        class="btn-green"
         onclick="saveProduct()"
       >
-        💾 Guardar gorra
+        Guardar producto
       </button>
 
       <button
         id="cancelButton"
-        class="secondary hidden"
-        onclick="clearForm()"
+        class="btn-gray hidden"
+        onclick="cancelEdit()"
       >
         Cancelar edición
       </button>
 
-      <div id="productMessage" class="message"></div>
+      <div id="formMessage" class="message hidden"></div>
 
     </div>
 
 
-    <!-- CATÁLOGO -->
+    <!-- PRODUCTOS -->
     <div class="card">
 
-      <h2>Mis gorras</h2>
-
-      <button onclick="loadProducts()">
-        🔄 Actualizar catálogo
-      </button>
+      <h2>Catálogo</h2>
 
       <div id="products">
-        Cargando...
+        Cargando productos...
       </div>
 
     </div>
 
-  </div>
+  </section>
 
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 
-  /* =========================================
-     CONFIGURACIÓN
-     ========================================= */
+  /* =========================================================
+     CONFIGURACIÓN SUPABASE
+     ========================================================= */
 
   const SUPABASE_URL =
     "https://itxptdwwnpnsbzbzwkwt.supabase.co";
 
-  /*
-     PEGA AQUÍ TU PUBLISHABLE KEY.
 
-     NO pongas tu contraseña.
-     NO pongas la Secret Key.
+  /*
+    PEGA AQUÍ TU PUBLISHABLE KEY DE SUPABASE.
+
+    IMPORTANTE:
+    - Usa la Publishable Key.
+    - No uses la Secret Key.
+    - No debe tener espacios.
   */
 
   const SUPABASE_KEY =
@@ -348,176 +411,769 @@
     );
 
 
-  /* =========================================
-     ELEMENTOS
-     ========================================= */
-
-  const loginSection =
-    document.getElementById("loginSection");
-
-  const adminSection =
-    document.getElementById("adminSection");
+  const ADMIN_EMAIL =
+    document.getElementById("email").value.trim();
 
 
-  /* =========================================
-     MENSAJES
-     ========================================= */
-
-  function message(id, text, type) {
-
-    const element =
-      document.getElementById(id);
-
-    element.textContent = text;
-
-    element.className =
-      "message " + type;
-  }
+  const BUCKET =
+    "product-images";
 
 
-  /* =========================================
-     ENLACE MÁGICO
-     ========================================= */
+  let editingProduct = null;
+
+
+  /* =========================================================
+     INICIO
+     ========================================================= */
+
+  document.addEventListener("DOMContentLoaded", async () => {
+
+    const {
+      data: {
+        session
+      }
+    } = await supabaseClient.auth.getSession();
+
+    if (session) {
+
+      const email =
+        session.user.email;
+
+      if (email === ADMIN_EMAIL) {
+
+        showAdmin(email);
+
+      } else {
+
+        await supabaseClient.auth.signOut();
+
+        showLoginMessage(
+          "Esta cuenta no tiene permiso para administrar RC HATS.",
+          true
+        );
+      }
+    }
+
+  });
+
+
+  /* =========================================================
+     AUTH
+     ========================================================= */
 
   async function sendMagicLink() {
 
     const email =
-      document.getElementById("email")
-        .value
-        .trim();
-
+      document.getElementById("email").value.trim();
 
     if (!email) {
 
-      message(
-        "loginMessage",
+      showLoginMessage(
         "Escribe tu correo electrónico.",
-        "error"
+        true
       );
 
       return;
     }
 
 
-    message(
-      "loginMessage",
-      "Enviando enlace...",
-      "ok"
-    );
+    const button =
+      document.getElementById("loginButton");
+
+    button.disabled = true;
+
+    button.textContent =
+      "Enviando...";
 
 
-    const redirectTo =
-      window.location.origin +
-      window.location.pathname;
+    try {
+
+      const redirectTo =
+        window.location.origin +
+        window.location.pathname;
 
 
-    const { error } =
+      const {
+        error
+      } =
       await supabaseClient.auth.signInWithOtp({
 
         email: email,
 
         options: {
-          emailRedirectTo: redirectTo
+
+          emailRedirectTo: redirectTo,
+
+          shouldCreateUser: false
+
         }
 
       });
 
 
-    if (error) {
+      if (error) {
+
+        console.error(error);
+
+        showLoginMessage(
+          "No se pudo enviar el enlace.\n\n" +
+          error.message,
+          true
+        );
+
+      } else {
+
+        showLoginMessage(
+          "Enlace enviado correctamente.\n\n" +
+          "Revisa tu correo y abre el enlace para entrar.",
+          false
+        );
+
+      }
+
+    } catch (error) {
 
       console.error(error);
 
-      message(
-        "loginMessage",
-        "No se pudo enviar el enlace. Revisa la configuración de Supabase.",
-        "error"
+      showLoginMessage(
+        "Ocurrió un error:\n\n" +
+        error.message,
+        true
       );
 
-      return;
     }
 
 
-    message(
-      "loginMessage",
-      "✅ Enlace enviado. Revisa tu correo y toca el enlace para entrar.",
-      "ok"
-    );
+    button.disabled = false;
 
+    button.textContent =
+      "Enviarme enlace de acceso";
   }
 
 
-  /* =========================================
-     MOSTRAR ADMIN
-     ========================================= */
+  supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
 
-  function showAdmin(user) {
+      if (
+        event === "SIGNED_IN" &&
+        session
+      ) {
 
-    loginSection.classList.add("hidden");
+        const email =
+          session.user.email;
 
-    adminSection.classList.remove("hidden");
+        const adminEmail =
+          document.getElementById("email")
+            .value
+            .trim();
 
-    document.getElementById("adminEmail")
-      .textContent = user.email || "";
+        if (email === adminEmail) {
+
+          showAdmin(email);
+
+        } else {
+
+          await supabaseClient.auth.signOut();
+
+          alert(
+            "Esta cuenta no tiene permiso para administrar RC HATS."
+          );
+        }
+
+      }
+
+
+      if (event === "SIGNED_OUT") {
+
+        document
+          .getElementById("adminSection")
+          .classList.add("hidden");
+
+        document
+          .getElementById("loginSection")
+          .classList.remove("hidden");
+      }
+
+    }
+  );
+
+
+  function showAdmin(email) {
+
+    document
+      .getElementById("loginSection")
+      .classList.add("hidden");
+
+    document
+      .getElementById("adminSection")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("userEmail")
+      .textContent = email;
 
     loadProducts();
-
   }
 
-
-  /* =========================================
-     CERRAR SESIÓN
-     ========================================= */
 
   async function logout() {
 
     await supabaseClient.auth.signOut();
 
-    adminSection.classList.add("hidden");
+  }
 
-    loginSection.classList.remove("hidden");
+
+  function showLoginMessage(message, error) {
+
+    const box =
+      document.getElementById("loginMessage");
+
+    box.textContent = message;
+
+    box.classList.remove(
+      "hidden",
+      "success",
+      "error"
+    );
+
+    box.classList.add(
+      error ? "error" : "success"
+    );
 
   }
 
 
-  /* =========================================
+  /* =========================================================
+     PREVISUALIZAR FOTOS
+     ========================================================= */
+
+  function previewImages() {
+
+    const input =
+      document.getElementById("productImages");
+
+    const preview =
+      document.getElementById("preview");
+
+    preview.innerHTML = "";
+
+
+    const files =
+      Array.from(input.files);
+
+
+    files.forEach((file, index) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload = function(e) {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "preview-item";
+
+
+        item.innerHTML = `
+
+          <img
+            src="${e.target.result}"
+            alt="Foto ${index + 1}"
+          >
+
+          <span class="preview-number">
+            ${index + 1}
+          </span>
+
+        `;
+
+
+        preview.appendChild(item);
+
+      };
+
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+
+  /* =========================================================
+     SUBIR FOTOS
+     ========================================================= */
+
+  async function uploadImages(files, productId) {
+
+    const urls = [];
+
+
+    for (
+      let i = 0;
+      i < files.length;
+      i++
+    ) {
+
+      const file =
+        files[i];
+
+
+      const extension =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+
+      const safeName =
+        file.name
+          .replace(
+            /[^a-zA-Z0-9.-]/g,
+            "_"
+          );
+
+
+      const uniqueName =
+        Date.now() +
+        "_" +
+        i +
+        "_" +
+        Math.random()
+          .toString(36)
+          .substring(2, 8) +
+        "_" +
+        safeName;
+
+
+      const path =
+        "productos/" +
+        productId +
+        "/" +
+        uniqueName;
+
+
+      const {
+        data,
+        error
+      } =
+      await supabaseClient
+        .storage
+        .from(BUCKET)
+        .upload(
+          path,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false,
+            contentType:
+              file.type
+          }
+        );
+
+
+      if (error) {
+
+        console.error(error);
+
+        throw new Error(
+          "No se pudo subir la foto " +
+          (i + 1) +
+          ": " +
+          error.message
+        );
+
+      }
+
+
+      const {
+        data: publicData
+      } =
+      supabaseClient
+        .storage
+        .from(BUCKET)
+        .getPublicUrl(path);
+
+
+      if (
+        !publicData ||
+        !publicData.publicUrl
+      ) {
+
+        throw new Error(
+          "No se pudo obtener la URL de la foto."
+        );
+
+      }
+
+
+      urls.push(
+        publicData.publicUrl
+      );
+
+    }
+
+
+    return urls;
+
+  }
+
+
+  /* =========================================================
+     GUARDAR PRODUCTO
+     ========================================================= */
+
+  async function saveProduct() {
+
+    const name =
+      document
+        .getElementById("productName")
+        .value
+        .trim();
+
+
+    const type =
+      document
+        .getElementById("productType")
+        .value;
+
+
+    const available =
+      document
+        .getElementById("productAvailable")
+        .value === "true";
+
+
+    const files =
+      Array.from(
+        document
+          .getElementById("productImages")
+          .files
+      );
+
+
+    const message =
+      document.getElementById("formMessage");
+
+
+    const button =
+      document.getElementById("saveButton");
+
+
+    if (!name) {
+
+      showFormMessage(
+        "Escribe el nombre del producto.",
+        true
+      );
+
+      return;
+
+    }
+
+
+    if (
+      !editingProduct &&
+      files.length === 0
+    ) {
+
+      showFormMessage(
+        "Selecciona por lo menos una foto.",
+        true
+      );
+
+      return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Guardando...";
+
+
+    try {
+
+      /* =====================================================
+         NUEVO PRODUCTO
+         ===================================================== */
+
+      if (!editingProduct) {
+
+        const {
+          data: product,
+          error
+        } =
+        await supabaseClient
+          .from("productos")
+          .insert({
+
+            nombre: name,
+
+            tipo: type,
+
+            disponible: available,
+
+            imagen_url: "[]"
+
+          })
+          .select()
+          .single();
+
+
+        if (error) {
+
+          throw error;
+
+        }
+
+
+        const imageUrls =
+          await uploadImages(
+            files,
+            product.id
+          );
+
+
+        const {
+          error: updateError
+        } =
+        await supabaseClient
+          .from("productos")
+          .update({
+
+            imagen_url:
+              JSON.stringify(
+                imageUrls
+              )
+
+          })
+          .eq(
+            "id",
+            product.id
+          );
+
+
+        if (updateError) {
+
+          throw updateError;
+
+        }
+
+
+        showFormMessage(
+          "Producto agregado correctamente.",
+          false
+        );
+
+      }
+
+
+      /* =====================================================
+         EDITAR PRODUCTO
+         ===================================================== */
+
+      else {
+
+        let imageUrls =
+          getProductImages(
+            editingProduct
+              .imagen_url
+          );
+
+
+        /*
+          Si seleccionaste nuevas fotos,
+          se agregan a las existentes.
+        */
+
+        if (files.length > 0) {
+
+          const newUrls =
+            await uploadImages(
+              files,
+              editingProduct.id
+            );
+
+
+          imageUrls =
+            imageUrls.concat(
+              newUrls
+            );
+
+        }
+
+
+        const {
+          error
+        } =
+        await supabaseClient
+          .from("productos")
+          .update({
+
+            nombre: name,
+
+            tipo: type,
+
+            disponible: available,
+
+            imagen_url:
+              JSON.stringify(
+                imageUrls
+              )
+
+          })
+          .eq(
+            "id",
+            editingProduct.id
+          );
+
+
+        if (error) {
+
+          throw error;
+
+        }
+
+
+        showFormMessage(
+          "Producto actualizado correctamente.",
+          false
+        );
+
+      }
+
+
+      resetForm();
+
+      await loadProducts();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showFormMessage(
+        "No se pudo guardar el producto.\n\n" +
+        error.message,
+        true
+      );
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent =
+      editingProduct
+        ? "Actualizar producto"
+        : "Guardar producto";
+
+  }
+
+
+  /* =========================================================
+     OBTENER IMÁGENES
+     ========================================================= */
+
+  function getProductImages(value) {
+
+    if (!value) {
+
+      return [];
+
+    }
+
+
+    try {
+
+      const parsed =
+        JSON.parse(value);
+
+
+      if (
+        Array.isArray(parsed)
+      ) {
+
+        return parsed;
+
+      }
+
+    } catch (e) {
+
+      /*
+        Compatibilidad con productos
+        antiguos que tenían una sola URL.
+      */
+
+    }
+
+
+    return [value];
+
+  }
+
+
+  /* =========================================================
      CARGAR PRODUCTOS
-     ========================================= */
+     ========================================================= */
 
   async function loadProducts() {
 
     const container =
       document.getElementById("products");
 
+
     container.innerHTML =
-      "Cargando gorras...";
+      "Cargando productos...";
 
 
-    const { data, error } =
-      await supabaseClient
-        .from("productos")
-        .select("*")
-        .order("id", {
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("productos")
+      .select("*")
+      .order(
+        "created_at",
+        {
           ascending: false
-        });
+        }
+      );
 
 
     if (error) {
 
       console.error(error);
 
-      container.innerHTML =
-        "<p>No se pudieron cargar las gorras.</p>";
+      container.innerHTML = `
+        <div class="message error">
+          No se pudieron cargar los productos.
+          <br><br>
+          ${escapeHtml(error.message)}
+        </div>
+      `;
 
       return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+      !data ||
+      data.length === 0
+    ) {
 
       container.innerHTML =
-        "<p>Aún no tienes gorras registradas.</p>";
+        "Todavía no hay productos.";
 
       return;
+
     }
 
 
@@ -526,61 +1182,89 @@
 
     data.forEach(product => {
 
+      const images =
+        getProductImages(
+          product.imagen_url
+        );
+
+
       const div =
         document.createElement("div");
 
-      div.className = "product";
+      div.className =
+        "product";
 
 
-      const image =
-        product.imagen_url
-          ? `
-            <img
-              src="${escapeHtml(product.imagen_url)}"
-              alt="${escapeHtml(product.nombre || "Gorra")}"
-              onerror="this.style.display='none'"
-            >
-          `
-          : "";
+      let imagesHTML = "";
 
 
-      const status =
-        product.disponible
-          ? `<p class="available">✓ Disponible</p>`
-          : `<p class="unavailable">✕ Agotada</p>`;
+      images.forEach(url => {
+
+        imagesHTML += `
+
+          <img
+            src="${escapeAttribute(url)}"
+            alt="${escapeAttribute(product.nombre)}"
+          >
+
+        `;
+
+      });
 
 
       div.innerHTML = `
 
-        ${image}
+        <div class="product-images">
 
-        <h3>
-          ${escapeHtml(product.nombre || "Sin nombre")}
-        </h3>
-
-        <p>
-          <strong>Tipo:</strong>
-          ${escapeHtml(product.tipo || "")}
-        </p>
-
-        ${status}
-
-        <div class="actions">
-
-          <button
-            onclick='editProduct(${JSON.stringify(product)})'
-          >
-            ✏️ Editar
-          </button>
-
-          <button
-            class="danger"
-            onclick="deleteProduct(${product.id})"
-          >
-            🗑️ Eliminar
-          </button>
+          ${
+            imagesHTML ||
+            "<div>Sin fotos</div>"
+          }
 
         </div>
+
+
+        <div class="product-info">
+
+          <h3>
+            ${escapeHtml(product.nombre)}
+          </h3>
+
+          <p>
+            <strong>Tipo:</strong>
+            ${escapeHtml(product.tipo)}
+          </p>
+
+          <p class="${
+            product.disponible
+              ? "available"
+              : "unavailable"
+          }">
+
+            ${
+              product.disponible
+                ? "Disponible"
+                : "Agotado"
+            }
+
+          </p>
+
+        </div>
+
+
+        <button
+          onclick="editProduct(${product.id})"
+        >
+          Editar
+        </button>
+
+
+        <button
+          class="btn-red"
+          onclick="deleteProduct(${product.id})"
+        >
+          Eliminar
+        </button>
 
       `;
 
@@ -592,247 +1276,254 @@
   }
 
 
-  /* =========================================
-     SEGURIDAD HTML
-     ========================================= */
-
-  function escapeHtml(value) {
-
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
-
-
-  /* =========================================
-     GUARDAR PRODUCTO
-     ========================================= */
-
-  async function saveProduct() {
-
-    const id =
-      document.getElementById("productId").value;
-
-    const nombre =
-      document.getElementById("productName")
-        .value
-        .trim();
-
-    const tipo =
-      document.getElementById("productType").value;
-
-    const imagen_url =
-      document.getElementById("productImage")
-        .value
-        .trim();
-
-    const disponible =
-      document.getElementById("productAvailable")
-        .value === "true";
-
-
-    if (!nombre) {
-
-      message(
-        "productMessage",
-        "Escribe el nombre de la gorra.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    message(
-      "productMessage",
-      "Guardando...",
-      "ok"
-    );
-
-
-    let result;
-
-
-    if (id) {
-
-      result =
-        await supabaseClient
-          .from("productos")
-          .update({
-            nombre,
-            tipo,
-            imagen_url,
-            disponible
-          })
-          .eq("id", id);
-
-    } else {
-
-      result =
-        await supabaseClient
-          .from("productos")
-          .insert({
-            nombre,
-            tipo,
-            imagen_url,
-            disponible
-          });
-
-    }
-
-
-    if (result.error) {
-
-      console.error(result.error);
-
-      message(
-        "productMessage",
-        "No se pudo guardar la gorra.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    message(
-      "productMessage",
-      "✅ Gorra guardada correctamente.",
-      "ok"
-    );
-
-
-    clearForm();
-
-    loadProducts();
-
-  }
-
-
-  /* =========================================
+  /* =========================================================
      EDITAR
-     ========================================= */
+     ========================================================= */
 
-  function editProduct(product) {
+  async function editProduct(id) {
 
-    document.getElementById("productId")
-      .value = product.id;
-
-    document.getElementById("productName")
-      .value = product.nombre || "";
-
-    document.getElementById("productType")
-      .value = product.tipo || "G5";
-
-    document.getElementById("productImage")
-      .value = product.imagen_url || "";
-
-    document.getElementById("productAvailable")
-      .value = product.disponible
-        ? "true"
-        : "false";
-
-
-    document.getElementById("formTitle")
-      .textContent = "Editar gorra";
-
-
-    document.getElementById("cancelButton")
-      .classList.remove("hidden");
-
-  }
-
-
-  /* =========================================
-     LIMPIAR FORMULARIO
-     ========================================= */
-
-  function clearForm() {
-
-    document.getElementById("productId")
-      .value = "";
-
-    document.getElementById("productName")
-      .value = "";
-
-    document.getElementById("productType")
-      .value = "G5";
-
-    document.getElementById("productImage")
-      .value = "";
-
-    document.getElementById("productAvailable")
-      .value = "true";
-
-    document.getElementById("formTitle")
-      .textContent = "Agregar gorra";
-
-    document.getElementById("cancelButton")
-      .classList.add("hidden");
-
-  }
-
-
-  /* =========================================
-     ELIMINAR
-     ========================================= */
-
-  async function deleteProduct(id) {
-
-    if (
-      !confirm(
-        "¿Seguro que quieres eliminar esta gorra?"
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("productos")
+      .select("*")
+      .eq(
+        "id",
+        id
       )
-    ) {
-      return;
-    }
-
-
-    const { error } =
-      await supabaseClient
-        .from("productos")
-        .delete()
-        .eq("id", id);
+      .single();
 
 
     if (error) {
 
-      console.error(error);
-
       alert(
-        "No se pudo eliminar la gorra."
+        "No se pudo cargar el producto:\n" +
+        error.message
       );
 
       return;
+
     }
 
 
-    loadProducts();
+    editingProduct =
+      data;
+
+
+    document
+      .getElementById("productId")
+      .value =
+      data.id;
+
+
+    document
+      .getElementById("productName")
+      .value =
+      data.nombre;
+
+
+    document
+      .getElementById("productType")
+      .value =
+      data.tipo;
+
+
+    document
+      .getElementById("productAvailable")
+      .value =
+      data.disponible
+        ? "true"
+        : "false";
+
+
+    document
+      .getElementById("formTitle")
+      .textContent =
+      "Editar producto";
+
+
+    document
+      .getElementById("saveButton")
+      .textContent =
+      "Actualizar producto";
+
+
+    document
+      .getElementById("cancelButton")
+      .classList
+      .remove("hidden");
+
+
+    const images =
+      getProductImages(
+        data.imagen_url
+      );
+
+
+    const preview =
+      document.getElementById("preview");
+
+
+    preview.innerHTML = "";
+
+
+    images.forEach(
+      (url, index) => {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "preview-item";
+
+
+        item.innerHTML = `
+
+          <img
+            src="${escapeAttribute(url)}"
+            alt="Foto ${index + 1}"
+          >
+
+          <span class="preview-number">
+            ${index + 1}
+          </span>
+
+        `;
+
+
+        preview.appendChild(item);
+
+      }
+    );
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
   }
 
 
-  /* =========================================
-     COMPROBAR SESIÓN
-     ========================================= */
+  /* =========================================================
+     ELIMINAR PRODUCTO
+     ========================================================= */
 
-  async function checkSession() {
+  async function deleteProduct(id) {
 
-    const { data } =
-      await supabaseClient.auth.getSession();
+    const confirmar =
+      confirm(
+        "¿Seguro que quieres eliminar este producto?"
+      );
 
 
-    if (
-      data.session &&
-      data.session.user
-    ) {
+    if (!confirmar) {
 
-      showAdmin(
-        data.session.user
+      return;
+
+    }
+
+
+    try {
+
+      const {
+        data: product,
+        error
+      } =
+      await supabaseClient
+        .from("productos")
+        .select("*")
+        .eq(
+          "id",
+          id
+        )
+        .single();
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      const images =
+        getProductImages(
+          product.imagen_url
+        );
+
+
+      /*
+        Convertimos las URLs públicas
+        nuevamente a rutas de Storage.
+      */
+
+      const paths =
+        images
+          .map(
+            getStoragePath
+          )
+          .filter(Boolean);
+
+
+      if (paths.length > 0) {
+
+        const {
+          error: storageError
+        } =
+        await supabaseClient
+          .storage
+          .from(BUCKET)
+          .remove(paths);
+
+
+        if (storageError) {
+
+          console.warn(
+            "No se pudieron eliminar algunas fotos:",
+            storageError
+          );
+
+        }
+
+      }
+
+
+      const {
+        error: deleteError
+      } =
+      await supabaseClient
+        .from("productos")
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+      if (deleteError) {
+
+        throw deleteError;
+
+      }
+
+
+      await loadProducts();
+
+      alert(
+        "Producto eliminado correctamente."
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "No se pudo eliminar el producto:\n\n" +
+        error.message
       );
 
     }
@@ -840,39 +1531,196 @@
   }
 
 
-  /* =========================================
-     ESCUCHAR CAMBIOS DE AUTENTICACIÓN
-     ========================================= */
+  /* =========================================================
+     OBTENER RUTA DE STORAGE
+     ========================================================= */
 
-  supabaseClient.auth.onAuthStateChange(
-    (event, session) => {
+  function getStoragePath(url) {
 
-      if (
-        session &&
-        session.user
-      ) {
+    if (!url) {
 
-        showAdmin(
-          session.user
-        );
-
-      } else {
-
-        adminSection.classList.add("hidden");
-
-        loginSection.classList.remove("hidden");
-
-      }
+      return null;
 
     }
-  );
 
 
-  /* =========================================
-     INICIAR
-     ========================================= */
+    const marker =
+      "/storage/v1/object/public/" +
+      BUCKET +
+      "/";
 
-  checkSession();
+
+    const index =
+      url.indexOf(marker);
+
+
+    if (index === -1) {
+
+      return null;
+
+    }
+
+
+    return decodeURIComponent(
+      url.substring(
+        index + marker.length
+      )
+    );
+
+  }
+
+
+  /* =========================================================
+     CANCELAR EDICIÓN
+     ========================================================= */
+
+  function cancelEdit() {
+
+    resetForm();
+
+  }
+
+
+  function resetForm() {
+
+    editingProduct = null;
+
+
+    document
+      .getElementById("productId")
+      .value = "";
+
+
+    document
+      .getElementById("productName")
+      .value = "";
+
+
+    document
+      .getElementById("productType")
+      .value = "G5";
+
+
+    document
+      .getElementById("productAvailable")
+      .value = "true";
+
+
+    document
+      .getElementById("productImages")
+      .value = "";
+
+
+    document
+      .getElementById("preview")
+      .innerHTML = "";
+
+
+    document
+      .getElementById("formTitle")
+      .textContent =
+      "Agregar producto";
+
+
+    document
+      .getElementById("saveButton")
+      .textContent =
+      "Guardar producto";
+
+
+    document
+      .getElementById("cancelButton")
+      .classList
+      .add("hidden");
+
+
+    document
+      .getElementById("formMessage")
+      .classList
+      .add("hidden");
+
+  }
+
+
+  /* =========================================================
+     MENSAJES
+     ========================================================= */
+
+  function showFormMessage(
+    message,
+    error
+  ) {
+
+    const box =
+      document.getElementById(
+        "formMessage"
+      );
+
+
+    box.textContent =
+      message;
+
+
+    box.classList.remove(
+      "hidden",
+      "success",
+      "error"
+    );
+
+
+    box.classList.add(
+      error
+        ? "error"
+        : "success"
+    );
+
+  }
+
+
+  /* =========================================================
+     SEGURIDAD DE TEXTO HTML
+     ========================================================= */
+
+  function escapeHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+      return "";
+
+    }
+
+
+    return String(value)
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  function escapeAttribute(value) {
+
+    return escapeHtml(value);
+
+  }
 
 </script>
 
